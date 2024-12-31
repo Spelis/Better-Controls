@@ -48,7 +48,8 @@ public class BetterControlsScreen extends OptionsSubScreen {
 	private final List<Option<SprintMode>> SPRINT_MODE_OPTIONS = Arrays.asList(
 		new Option<>(SprintMode.TAP_TO_START, text("Tap To Start Sprinting")),
 		new Option<>(SprintMode.TAP_TO_TOGGLE, text("Tap To Start / Stop Sprinting")),
-		new Option<>(SprintMode.HOLD, text("Hold To Sprint"))
+		new Option<>(SprintMode.HOLD, text("Hold To Sprint")),
+		new Option<>(SprintMode.HOLD_TO_WALK, text("Hold To Walk"))
 	);
 	
 	// Options
