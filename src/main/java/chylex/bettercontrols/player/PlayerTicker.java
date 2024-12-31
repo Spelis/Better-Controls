@@ -66,6 +66,11 @@ public final class PlayerTicker {
 	private boolean wasSneakingBeforeTouchingGround = false;
 	private boolean holdingSneakWhileTouchingGround = false;
 	private int temporaryFlyOnGroundTimer = 0;
+
+	private final KeyMapping KEY_HOLD_TO_WALK = OPTIONS.keyHoldToWalk;
+	private boolean isHoldingToWalk = false;
+	private long lastHoldToWalkTime = 0;
+	private static final long HOLD_TO_WALK_THRESHOLD_MS = 1000; // Adjust this value as needed
 	
 	private void setup() {
 		final AccessStickyKeyBindingStateGetter sprint = (AccessStickyKeyBindingStateGetter)KEY_SPRINT;
@@ -76,6 +81,11 @@ public final class PlayerTicker {
 		}
 		
 		sprint.setNeedsToggle(new SprintPressGetter(getter, () -> temporarySprintTimer > 0));
+		
+		KEY_HOLD_TO_WALK.setPressedListener(() -> {
+		        isHoldingToWalk = !isHoldingToWalk;
+		        lastHoldToWalkTime = System.currentTimeMillis();
+		    });
 	}
 	
 	public void atHead(final LocalPlayer player) {
@@ -181,6 +191,15 @@ public final class PlayerTicker {
 			wasHittingObstacle = player.horizontalCollision;
 			wasSprintingBeforeHittingObstacle = false;
 		}
+		if (cfg().holdToWalk) {
+		        if (KEY_HOLD_TO_WALK.isDown()) {
+		            if (!isHoldingToWalk) {
+		                startWalking(player);
+		            }
+		        } else if (isHoldingToWalk) {
+		            stopWalking(player);
+		        }
+		    }
 	}
 	
 	public void afterSuperCall(final LocalPlayer player) {
@@ -216,6 +235,17 @@ public final class PlayerTicker {
 					player.setOnGround(false);
 				}
 			}
+		    if (cfg().holdToWalk && isHoldingToWalk) {
+			final boolean wasSprinting = player.isSprinting();
+			
+			if (!player.onGround) {
+			    isHoldingToWalk = false;
+			} else if (wasSprinting) {
+			    stopWalking(player);
+			} else {
+			    startWalking(player);
+			}
+		    }
 		}
 		else {
 			wasSneakingBeforeTouchingGround = false;
@@ -282,5 +312,17 @@ public final class PlayerTicker {
 	
 	public boolean shouldResetFOV(final LocalPlayer player) {
 		return cfg().disableChangingFovWhileFlying && FlightHelper.isFlyingCreativeOrSpectator(player);
+	}
+
+	private void startWalking(LocalPlayer player) {
+	    // Implement the logic to start walking
+	    // This might involve setting a flag or calling a method to initiate walking
+	    player.setSprinting(true); // Or whatever method you use to indicate walking
+	}
+	
+	private void stopWalking(LocalPlayer player) {
+	    // Implement the logic to stop walking
+	    // This might involve resetting flags or calling a method to stop walking
+	    player.setSprinting(false); // Or whatever method you use to indicate stopping walking
 	}
 }
