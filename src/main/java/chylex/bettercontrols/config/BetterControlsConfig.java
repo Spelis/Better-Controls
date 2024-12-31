@@ -23,6 +23,8 @@ public final class BetterControlsConfig {
 	public SprintMode sprintMode = SprintMode.TAP_TO_START;
 	public boolean doubleTapForwardToSprint = true;
 	public boolean resumeSprintingAfterHittingObstacle = false;
+
+	public boolean holdToWalk = false;
 	
 	public final KeyBindingWithModifier keyToggleSneak = new KeyBindingWithModifier("key.bettercontrols.toggle_sneak");
 	public boolean sneakingMovesCameraSmoothly = true;
