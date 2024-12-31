@@ -76,11 +76,6 @@ public final class PlayerTicker {
 		}
 		
 		sprint.setNeedsToggle(new SprintPressGetter(getter, () -> temporarySprintTimer > 0));
-		
-		KEY_HOLD_TO_WALK.setPressedListener(() -> {
-		        isHoldingToWalk = !isHoldingToWalk;
-		        lastHoldToWalkTime = System.currentTimeMillis();
-		    });
 	}
 	
 	public void atHead(final LocalPlayer player) {
